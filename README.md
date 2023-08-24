@@ -6,13 +6,13 @@ Esse sistema fornece uma interface para que usuários do Centro Esportivo Univer
 - Juntar-se a partidas
 - Feedbacks aos participantes
 
-# Membros da equipe e papeld
+# Membros da equipe e papel
 
 
 - Bruno Lima de Oliveira - FULL
 - Guilherme Drumond Rosa - FULL
 - Lucas Braz Rossetti - FULL
-- Otávio Maciel Munaier Zucheratto -FULL
+- Otávio Maciel Munaier Zucheratto - FULL
 
 # Tecnologias principais
 
