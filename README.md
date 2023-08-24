@@ -11,7 +11,7 @@
 .Bruno Lima de Oliveira - FULL
 .Guilherme Drumond Rosa - FULL
 .Lucas Braz Rossetti - FULL
-.Otávio Maciel Munaier Zucheratto -FULL
+.Otávio Maciel Munaier Zucheratto - FULL
 
 # Tecnologias principais
 
