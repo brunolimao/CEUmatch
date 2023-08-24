@@ -8,6 +8,7 @@ Esse sistema fornece uma interface para que usuários do Centro Esportivo Univer
 
 # Membros da equipe e papeld
 
+
 - Bruno Lima de Oliveira - FULL
 - Guilherme Drumond Rosa - FULL
 - Lucas Braz Rossetti - FULL
@@ -20,3 +21,4 @@ Esse sistema fornece uma interface para que usuários do Centro Esportivo Univer
 - Express
 - Sequelize
 - MySQL
+
