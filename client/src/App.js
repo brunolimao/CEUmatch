@@ -1,32 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import './App.css';
+import axios from "axios";
+import { useEffect, useState} from 'react';
 
 function App() {
 
-  const [backendData, setBackendData] = useState([{}])
+  const [listOfPosts, setListOfPosts] = useState([]);
 
   useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => {
-        setBackendData(data)
-      }
-    )
-  }, [])
-
+    axios.get("http://localhost:3001/posts").then((response) => {
+      setListOfPosts(response.data);
+    });
+  }, []);
   return (
-    <div>
-
-      {(typeof backendData.users === 'undefined') ? (
-        <p>Loading...</p>
-      ): (
-        backendData.users.map((user, i) => (
-          <p key={i}>{user}</p>
-        ))
-      )}
-
+    <div className="App"> 
+      {listOfPosts.map((value, key) => { 
+        return (
+          <div className="post">
+            <div className="title"> {value.title} </div>
+            <div className="body"> {value.postText} </div>
+            <div className="footer"> {value.username} </div>
+          </div>
+        );
+      })}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
