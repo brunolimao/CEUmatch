@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { Matches } = require("../models");
+const Match = require("../models/Match.js");
 
 
 router.get("/", async (req, res) => {
-    const listofMatches = await Matches.findAll();
+    const listofMatches = await Match.findAll();
     res.json(listofMatches)
 });
 
 router.post("/", async (req, res) => {
     const match = req.body;
-    await Matches.create(match);
+    await Match.create(match);
     res.json(match);
 });
 
