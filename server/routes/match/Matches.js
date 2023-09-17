@@ -1,6 +1,8 @@
 const express = require('express');
+const { Op } = require("sequelize");
 const router = express.Router();
 const Match = require("../../models/Match.js");
+const MatchParticipants = require("../../models/MatchParticipants.js");
 
 
 router.get("/", async (req, res) => {

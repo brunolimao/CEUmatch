@@ -18,10 +18,10 @@ function UserMatches() {
     <div className="Matches"> 
       {listOfMatches.map((value, key) => { 
         return (
-          <div className="match">
+          <div className="match" key={key}>
             <div className="title"> {value.title} </div>
             <div className="body"> {value.matchCourt} </div>
-            <div className="footer"> {value.matchParticipants} </div>
+            <div className="footer"> {value.matchSport} </div>
           </div>
         );
       })}

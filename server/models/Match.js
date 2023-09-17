@@ -1,6 +1,6 @@
 const sequelize = require('./index.js');
 const {DataTypes} = require('sequelize');
-const User = require("./User.js")
+const User = require("./User.js");
 
 const Match = sequelize.define("Matches", {
     title: {
@@ -18,17 +18,14 @@ const Match = sequelize.define("Matches", {
         allowNull: false,
     },
 
-    matchParticipants: {
+    matchSport: {
         type: DataTypes.STRING,
-        allowNull: true,
-    },
+        allowNull: false,
+    }
 
-});
+}, { timestamps: false });
 
-Match.belongsTo(User)
-User.hasMany(Match,{
-    foreignKey: "matchOwner"
-})
+Match.belongsTo(User, { as: 'owner', foreignKey: 'userId' })
 
 Match.sync({alter: false, force: false})
 .then(() => {

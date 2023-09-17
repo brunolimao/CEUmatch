@@ -18,7 +18,7 @@ const User = sequelize.define("Users", {
         allowNull: false,
     },
 
-});
+}, { timestamps: false });
 
 User.sync({alter: false, force: false})
 .then(() => {
