@@ -1,25 +1,26 @@
-import './App.css';
+import '../style/matches.css';
 import axios from "axios";
 import { useEffect, useState} from 'react';
 
 
-function App() {
+function Matches() {
 
   const [listOfPosts, setListOfPosts] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/posts").then((response) => {
+    axios.get("http://localhost:3001/matches").then((response) => {
       setListOfPosts(response.data);
+      console.log(response.data)
     });
   }, []);
   return (
-    <div className="App"> 
+    <div className="Matches"> 
       {listOfPosts.map((value, key) => { 
         return (
-          <div className="post">
+          <div className="match">
             <div className="title"> {value.title} </div>
-            <div className="body"> {value.postText} </div>
-            <div className="footer"> {value.username} </div>
+            <div className="body"> {value.matchCourt} </div>
+            <div className="footer"> {value.matchOwner} </div>
           </div>
         );
       })}
@@ -27,4 +28,4 @@ function App() {
   );
 }
 
-export default App;
+export default Matches;

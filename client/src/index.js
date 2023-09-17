@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Login from './user/pages/login';
 import Register from './user/pages/register'
+import Matches from './match/pages/matches'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,6 +14,7 @@ root.render(
       <Routes>
         <Route path="/" element={<Login />}/>
         <Route path="/register" element={<Register />}/>
+        <Route path="/matches" element={<Matches />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

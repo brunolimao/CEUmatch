@@ -6,8 +6,8 @@ app.use(express.json());
 app.use(cors());
 
 // Routers
-const postRouter = require('./routes/Matches');
-app.use("/matches", postRouter);
+const matchRouter = require('./routes/match/Matches');
+app.use("/matches", matchRouter);
 
 
 app.listen(3001, () => {
