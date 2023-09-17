@@ -5,17 +5,16 @@ import { useEffect, useState} from 'react';
 
 function Matches() {
 
-  const [listOfPosts, setListOfPosts] = useState([]);
+  const [listOfMatches, setListOfMatches] = useState([]);
 
   useEffect(() => {
     axios.get("http://localhost:3001/matches").then((response) => {
-      setListOfPosts(response.data);
-      console.log(response.data)
+      setListOfMatches(response.data);
     });
   }, []);
   return (
     <div className="Matches"> 
-      {listOfPosts.map((value, key) => { 
+      {listOfMatches.map((value, key) => { 
         return (
           <div className="match">
             <div className="title"> {value.title} </div>
