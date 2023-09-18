@@ -1,6 +1,8 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
+const hashSecretKey = '67c0fbaeee22ae50902039bd1523c094dc27b4bce6ef664a939ac3bb2dbc780d'
+
 function loginMiddleware (req,res,next) {
     passport.authenticate(
         'login',
@@ -17,7 +19,7 @@ function loginMiddleware (req,res,next) {
                     email: user.email
                 };
             
-                const token = jwt.sign({user: body}, process.env.SECRET_KEY, {
+                const token = jwt.sign({user: body}, hashSecretKey, {
                     expiresIn: '1h',
                 });
 
@@ -35,7 +37,7 @@ function loginMiddleware (req,res,next) {
 }
 
 function jwtMiddleware(req, res, next) {
-    passport.authenticate('jwt', {session: false}, (error, user, info) => {
+    passport.authenticate('jwt', {session: true}, (error, user, info) => {
       try {
         if (error) return next(error);
   
