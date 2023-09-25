@@ -3,10 +3,22 @@ const { Op } = require("sequelize");
 const router = express.Router();
 const Match = require("../../models/Match.js");
 const MatchParticipants = require("../../models/MatchParticipants.js");
+const NOW = new Date();
 
 
 router.get("/", async (req, res) => {
-    const listofMatches = await Match.findAll();
+    const listofMatches = await Match.findAll({
+        where: {
+            "matchDate": {
+              [Op.and]: {
+                [Op.gte]: NOW
+              }
+            }
+        },
+        order: [
+            ['matchDate', 'ASC']
+        ]
+    });
     res.json(listofMatches)
 });
 
@@ -15,7 +27,10 @@ router.get("/usermatches/:id", async (req, res) => {
     const userMatches = await Match.findAll({
         where: {
             UserId: id
-        }
+        },
+        order: [
+            ['matchDate', 'ASC']
+        ]
     })
     res.json(userMatches)
 })
