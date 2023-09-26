@@ -13,7 +13,6 @@ router.post('/cadastro',
                 userData.password = await bcrypt.hash(userData.password, saltRounds);
                 await User.create(userData);
                 res.status(201).json(userData);
-               
             });
 
 router.post('/login',loginAlt);
@@ -27,7 +26,7 @@ router.get('/welcome' ,
 
 router.delete('/logout', function(req,res,nex){
     res.clearCookie("token");
-    res.send('Vc deslogou com sucesso');
+    res.send('Deslogado com sucesso.');
 });
 
 

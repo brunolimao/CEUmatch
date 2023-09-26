@@ -47,7 +47,7 @@ function validateJWT(req,res,next){
       next();
     } catch (err) {
       res.clearCookie("token");
-      res.send('Voce nao esta logado');
+      res.send('Você precisa estar logado para acessar essa rota.');
     }
 }
 
