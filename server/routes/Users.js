@@ -1,15 +1,12 @@
 const express = require('express');
-const { Op } = require("sequelize");
 const bcrypt = require('bcrypt');
-const passport = require('passport');
 const router = express.Router();
 const User = require("../models/User.js");
-const { loginMiddleware , jwtMiddleware } = require('../middlewares/auth.js');
+const { loginAlt, validateJWT } = require('../middlewares/auth.js');
 const app = express();
 app.use(express.json());
 
 router.post('/cadastro',
-            //jwtMiddleware, 
             async function(req,res,next) {
                 const userData = req.body;  // name , email , password
                 const saltRounds = 10;
@@ -19,16 +16,19 @@ router.post('/cadastro',
                
             });
 
-router.post('/login', loginMiddleware);
+router.post('/login',loginAlt);
 
-router.get('/teste' , async function(req,res,next){
-                    res.send('Teste concluído.');
+router.get('/welcome' , 
+            validateJWT,
+            async function(req , res , next){
+                const name = req.user.name;
+                res.status(200).send('Bem vindo, ' + name );
+            });
+
+router.delete('/logout', function(req,res,nex){
+    res.clearCookie("token");
+    res.send('Vc deslogou com sucesso');
 });
 
-router.get('/protected' , 
-            jwtMiddleware,
-            async function(req , res , next){
-                res.status(200).send('Voce tem acesso a uma rota protegida por login!');
-            });
 
 module.exports = router;

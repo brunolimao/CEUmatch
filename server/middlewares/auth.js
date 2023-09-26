@@ -1,60 +1,57 @@
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
+require("dotenv").config()
+const express = require("express")
+const app = express()
+app.use (express.json())
+const jwt = require("jsonwebtoken")
 
-const hashSecretKey = '67c0fbaeee22ae50902039bd1523c094dc27b4bce6ef664a939ac3bb2dbc780d'
+const bcrypt = require('bcrypt');
+const User = require('../models/User');
 
-function loginMiddleware (req,res,next) {
-    passport.authenticate(
-        'login',
-        (error, user, info) => {
-            try {
-                if (error) return next(error);
+const hashAcessSecretKey = '67c0fbaeee22ae50902039bd1523c094dc27b4bce6ef664a939ac3bb2dbc780d'
 
-                if (!user) {
-                    throw new Error('usuário Inválido');
-                }
-                
-                const body = {
-                    id: user.id,
-                    email: user.email
-                };
-            
-                const token = jwt.sign({user: body}, hashSecretKey, {
-                    expiresIn: '1h',
-                });
 
-                res.cookie ('jwt', token, {
-                    httpOnly: true,
-                    //secure: process.env.NODE_ENV === 'production',
-                })
+async function loginAlt(req,res,next){
+  const emailUser = req.body.email;
+  const passwordUser = req.body.password;
+  const user = await User.findOne({
+    where: {email:emailUser}
+  });
+  if (!user) {
+    throw new Error('E-mail incorreto!');
+  }
 
-                res.status(200).json(body);
-            } catch (error) {
-                next(error);
-            }   
-        }
-    )(req, res, next); 
+  const validPassword = await bcrypt.compare(passwordUser, user.password);
+  if (!validPassword) {
+      throw new Error('E-mail e/ou senha incorretos!');
+  }
+  let payload = {
+    id: user.id,
+    name: user.name,
+    email: user.email
+  };
+
+  const token = jwt.sign(payload, hashAcessSecretKey, {
+    //expiresIn: 60 // 1 minuto de expiração
+  });
+
+  res.cookie("token" , token);
+  
+  res.json({ auth: true, token: token });
 }
 
-function jwtMiddleware(req, res, next) {
-    passport.authenticate('jwt', {session: true}, (error, user, info) => {
-      try {
-        if (error) return next(error);
-  
-        if (!user) {
-          throw new Error('Você precisa estar logado para realizar essa ação');
-        }
+function validateJWT(req,res,next){
+    const token = req.cookies.token;
+    try {
+      const user = jwt.verify(token, hashAcessSecretKey);
+      req.user = user;
+      next();
+    } catch (err) {
+      res.clearCookie("token");
+      res.send('Voce nao esta logado');
+    }
+}
 
-        req.user = user;
-
-        next();
-      } catch (error) {
-        next(error);
-      }
-    })(req, res, next);
-  }
-  
-  module.exports = {
-    loginMiddleware,
-    jwtMiddleware,
-  };
+module.exports = {
+  loginAlt,
+  validateJWT
+};
