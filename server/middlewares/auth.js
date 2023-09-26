@@ -33,14 +33,13 @@ async function loginAlt(req,res,next){
   const token = jwt.sign(payload, hashAcessSecretKey, {
     //expiresIn: 60 // 1 minuto de expiração
   });
-
-  res.cookie("token" , token);
   
-  res.json({ auth: true, token: token });
+  res.json(token);
 }
 
 function validateJWT(req,res,next){
-    const token = req.cookies.token;
+    const token = req.headers.token;
+    
     try {
       const user = jwt.verify(token, hashAcessSecretKey);
       req.user = user;

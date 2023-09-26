@@ -15,16 +15,22 @@ router.post('/cadastro',
                 res.status(201).send(userData);
             });
 
-router.post('/login',loginAlt);
+router.post('/login',loginAlt,
+    async function(req , res , next){
+        res.redirect("/welcome")
+});
+
+
 
 router.get('/welcome' , 
             validateJWT,
             async function(req , res , next){
-                const name = req.user.name;
-                res.status(200).send('Bem vindo, ' + name );
+                const name = req.user.id;
+                res.status(200).json({name});
             });
 
-router.delete('/logout', function(req,res,nex){
+router.get('/logout', function(req,res,nex){
+    res.sessionStorage.clear()
     res.clearCookie("token");
     res.send('Deslogado com sucesso.');
 });

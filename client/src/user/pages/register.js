@@ -38,7 +38,7 @@ function Register(){
 				password: password,
 		  });
 		  console.log(response.data);
-			navigate('/matches');
+			navigate('/');
 		} catch (error) {
 		  console.error(error);
 		}

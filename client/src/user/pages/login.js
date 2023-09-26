@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from 'react';
-import {Link} from "react-router-dom";
+import axios from "axios";
+import {Link, useNavigate} from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -16,16 +16,34 @@ import "../style/login.css"
 
 
 function Login(){
-	const [validated, setValidated] = useState(false);
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+	const navigate = useNavigate()
 
-    setValidated(true);
+  const handleSubmit = async (e) => {
+
+		e.preventDefault();
+
+		const emailInput = document.getElementById("email");
+		const passwordInput = document.getElementById("password");
+
+		const email = emailInput.value;
+		const password = passwordInput.value;
+
+		try {
+		  const response = await axios.post('http://localhost:3001/users/login', {
+				email: email,
+				password: password,
+		  }, {
+			  withCredentials: true,
+		})
+			sessionStorage.setItem("token",response.data)
+			console.log(response.data);
+			navigate('/matches');
+		} catch (error) {
+		  console.error(error);
+		}
+
+		
   };
 
   return(
@@ -37,7 +55,7 @@ function Login(){
 					<Row>
 						<Col xs={12} md={6} className="my-auto px-5">
 							<Card.Title className="my-5"><h2>CEUMatch</h2></Card.Title>
-							<Form noValidate validated={validated} onSubmit={handleSubmit}>
+							<Form onSubmit={handleSubmit}>
 								<Row className="justify-content-center">
 									<Col md={6}>
 										<InputGroup className="mb-4">
@@ -50,6 +68,7 @@ function Login(){
 												placeholder="Email"
 												aria-label="Email"
 												aria-describedby="basic-addon1"
+												id = "email"
 											/>
 											<Form.Control.Feedback></Form.Control.Feedback>
 											<Form.Control.Feedback type="invalid">Email inválido</Form.Control.Feedback>
@@ -64,6 +83,7 @@ function Login(){
 												placeholder="Senha"
 												aria-label="Senha"
 												aria-describedby="basic-addon1"
+												id = "password"
 											/>
 											<Form.Control.Feedback></Form.Control.Feedback>
 											<Form.Control.Feedback type="invalid">Senha inválida</Form.Control.Feedback>
@@ -79,7 +99,7 @@ function Login(){
 								</Row>
 								<Row className="justify-content-center mb-5">
 									<Col md={6}>
-										<h8>Não possui uma conta? <Link to="/register">Registre-se aqui.</Link></h8>
+										<p>Não possui uma conta? <Link to="/register">Registre-se aqui.</Link></p>
 									</Col>
 								</Row>
 								

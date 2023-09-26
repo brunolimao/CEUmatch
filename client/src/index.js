@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Login from './user/pages/login';
 import Register from './user/pages/register'
+import Teste from './user/pages/teste'
 import Matches from './match/pages/matches'
 import UserMatches from './match/pages/userMatches'
 import reportWebVitals from './reportWebVitals';
@@ -14,6 +15,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />}/>
+        <Route path="/users/welcome" element={<Teste />}/>
         <Route path="/register" element={<Register />}/>
         <Route path="/matches" element={<Matches />}/>
         <Route path="/matches/usermatches/:id" element={<UserMatches />}/>
