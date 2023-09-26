@@ -12,7 +12,7 @@ router.post('/cadastro',
                 const saltRounds = 10;
                 userData.password = await bcrypt.hash(userData.password, saltRounds);
                 await User.create(userData);
-                res.status(201).json(userData);
+                res.status(201).send(userData);
             });
 
 router.post('/login',loginAlt);
