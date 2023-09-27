@@ -2,23 +2,20 @@ import React from "react";
 import '../style/matches.css';
 import axios from "axios";
 import { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
 import moment from "moment";
-
+import { useNavigate } from 'react-router-dom'
 
 function UserMatches() {
 
-  let { id } = useParams()
   const [listOfMatches, setListOfMatches] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
-    //axios.get(`http://localhost:3001/auth/matches/usermatches/${id}`).then((response) => {
-    axios.get(`http://localhost:3001/matches/usermatches/${id}`).then((response) => {
+    axios.get(`http://localhost:3001/matches/usermatches/`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
       setListOfMatches(response.data);
     });
   }, []);
@@ -61,14 +58,9 @@ function UserMatches() {
         );
       })}
       <Row className="position-absolute top-40">
-        <Button type="submit" className="px-4" variant="success">
+        <Button className="px-4" variant="success" onClick={() => navigate('/matches/creatematch')}>
           Criar Partida
         </Button>
-      </Row>
-      <Row className="position-absolute bottom-0">
-        <Alert key={'success'} variant={'success'}>
-          Fim das suas partidas
-        </Alert>
       </Row>
     </div>
   );

@@ -25,18 +25,29 @@ router.get("/", validateJWT,
 	}
 );
 
-router.get("/usermatches/:id", async (req, res) => {
-    const id = req.params.id
+router.get("/usermatches", validateJWT, async function (req, res, next) {
+    const id = req.user.id
     const userMatches = await Match.findAll({
         where: {
-            UserId: id
+            userId: id
         },
         order: [
             ['matchDate', 'ASC']
         ]
     })
     res.json(userMatches)
-})
+});
+
+router.get('/createMatch', validateJWT, async function (req,res,next) {
+    const id = req.user.id;
+    res.json(id);
+});
+
+router.post('/createMatch', async function (req,res) {
+                const matchData = req.body;
+                await Match.create(matchData);
+                res.status(201).send(matchData);
+});
 
 router.post("/", async (req, res) => {
     const match = req.body;

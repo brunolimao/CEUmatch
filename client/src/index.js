@@ -5,6 +5,7 @@ import Register from './user/pages/register'
 import Teste from './user/pages/teste'
 import Matches from './match/pages/matches'
 import UserMatches from './match/pages/userMatches'
+import CreateMatch from './match/pages/createMatch'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,7 +19,8 @@ root.render(
         <Route path="/users/welcome" element={<Teste />}/>
         <Route path="/register" element={<Register />}/>
         <Route path="/matches" element={<Matches />}/>
-        <Route path="/matches/usermatches/:id" element={<UserMatches />}/>
+        <Route path="/matches/usermatches" element={<UserMatches />}/>
+        <Route path="/matches/creatematch" element={<CreateMatch />}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
