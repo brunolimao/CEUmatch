@@ -29,7 +29,12 @@ router.get("/usermatches", validateJWT, async function (req, res, next) {
     const id = req.user.id
     const userMatches = await Match.findAll({
         where: {
-            userId: id
+            userId: id,
+            matchDate: {
+                [Op.and]: {
+                    [Op.gte]: NOW
+                }
+            }
         },
         order: [
             ['matchDate', 'ASC']

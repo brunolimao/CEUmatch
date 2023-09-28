@@ -30,11 +30,11 @@ function UserMatches() {
               </Card.Header>
               <Card.Body>
                 <Card.Title className="text-center" as="h4">
-                  {moment(value.matchDate).utc().format('DD/MM/YYYY')} - {value.matchSport}
+                  {value.matchSport} - {value.matchCourt}
                 </Card.Title>
                 <Row className="text-center">
                   <Card.Text as="h6">
-                    {value.matchCourt}
+                    {moment(value.matchDate).utc().format('DD/MM/YYYY - HH:mm')}
                   </Card.Text>
                 </Row>
                 <Row className="justify-content-center">
