@@ -30,11 +30,6 @@ router.get("/usermatches", validateJWT, async function (req, res, next) {
     const userMatches = await Match.findAll({
         where: {
             userId: id,
-            matchDate: {
-                [Op.and]: {
-                    [Op.gte]: NOW
-                }
-            }
         },
         order: [
             ['matchDate', 'ASC']
@@ -52,6 +47,19 @@ router.post('/createMatch', async function (req,res) {
                 const matchData = req.body;
                 await Match.create(matchData);
                 res.status(201).send(matchData);
+});
+
+router.get('/updateMatch/:id', validateJWT, async function (req,res,next) {
+    const id = req.params.id
+    const eMatch = await Match.findByPk(id);
+    res.json(eMatch);
+});
+
+router.post('/updateMatch/:id', async function (req,res) {
+    const id = req.params.id
+    const { title, matchDate, matchCourt, matchSport } = req.body;
+    await Match.update({ title: title, matchDate: matchDate, matchCourt: matchCourt, matchSport: matchSport }, { where: { id: id } });
+    res.status(201).send(id);
 });
 
 router.post("/", async (req, res) => {

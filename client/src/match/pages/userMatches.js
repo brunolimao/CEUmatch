@@ -44,8 +44,8 @@ function UserMatches() {
                 </Row>
                 <Row className="justify-content-center text-end mt-3">
 									<Col md={12}>
-                    <Button type="submit" className="px-4" variant="primary">
-                          Editar 
+                    <Button className="px-4" variant="primary" onClick={() => navigate(`/matches/updatematch/${value.id}`)}>
+                          Editar
                     </Button>
                     <Button type="submit" className="px-4" variant="danger">
                           Excluir
