@@ -62,6 +62,16 @@ router.post('/updateMatch/:id', async function (req,res) {
     res.status(201).send(id);
 });
 
+router.delete('/deleteMatch/:id', validateJWT, async function (req, res) {
+    const id = req.params.id;
+    await Match.destroy({
+        where: {
+            id: id,
+        },
+    });
+    res.json("DELETADA")
+})
+
 router.post("/", async (req, res) => {
     const match = req.body;
     await Match.create(match);

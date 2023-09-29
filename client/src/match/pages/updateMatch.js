@@ -12,6 +12,7 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFutbol, faArrowLeft, faA, faCalendarDays, faLocationPin} from '@fortawesome/free-solid-svg-icons'
+import NavbarHome from "../../components/NavbarHome";
 
 import '../../user/style/register.css'
 
@@ -62,6 +63,7 @@ function UpdateMatch(){
 
 
   return(
+		<><NavbarHome></NavbarHome>
 		<Container className="position-absolute top-50 start-50 translate-middle login-page">
 			<Row className="justify-content-center">
 				<Col md={6}>
@@ -168,6 +170,7 @@ function UpdateMatch(){
 
 
 		</Container>
+		</>
   )
 }
 
