@@ -9,13 +9,13 @@ const app = express();
 app.use(express.json());
 
 router.post('/cadastro',
-            async function(req,res,next) {
-                const userData = req.body;  // name , email , password
-                const saltRounds = 10;
-                userData.password = await bcrypt.hash(userData.password, saltRounds);
-                await User.create(userData);
-                res.status(201).send(userData);
-            });
+  async function(req,res,next) {
+      const userData = req.body;  // name , email , password
+      const saltRounds = 10;
+      userData.password = await bcrypt.hash(userData.password, saltRounds);
+      await User.create(userData);
+      res.status(201).send(userData);
+  });
 
 router.post('/login',loginAlt,
     async function(req , res , next){
@@ -25,11 +25,11 @@ router.post('/login',loginAlt,
 
 
 router.get('/welcome' , 
-            validateJWT,
-            async function(req , res , next){
-                const name = req.user.id;
-                res.status(200).json({name});
-            });
+    validateJWT,
+    async function(req , res , next){
+        const name = req.user.id;
+        res.status(200).json({name});
+    });
 
 router.get('/logout', function(req,res,nex){
     res.sessionStorage.clear()
@@ -63,6 +63,15 @@ router.get('/solicitations',
   res.status(200).json({userSolicitations});
   }
 )
+
+router.get('/:id' ,
+  validateJWT,
+  async function(req,res,next){
+    const id = req.params.id;
+    const user = await User.findByPk(id);
+    const nameUser = user.name;
+    return nameUser;
+  })
 
 router.get('/solicitations/accept', validateJWT, async function (req,res,next) {
   const id = req.user.id;
