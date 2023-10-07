@@ -5,6 +5,7 @@ const Match = require("../../models/Match.js");
 const MatchParticipants = require("../../models/MatchParticipants.js");
 const NOW = new Date();
 const  {validateJWT} = require('../../middlewares/auth.js');
+const UserSolicitations = require('../../models/UserSolicitations.js');
 
 
 router.get("/", validateJWT,
@@ -36,6 +37,17 @@ router.get("/usermatches", validateJWT, async function (req, res, next) {
         ]
     })
     res.json(userMatches)
+});
+
+router.get('/requests/:id' , async function(req,res) {
+    const id = req.params.id
+    const userSolicitations = await UserSolicitations.findAll({
+        where: {
+            MatchId: id
+        },
+        attributes:['UserId']
+    })
+    res.json(userSolicitations)
 });
 
 router.get('/createMatch', validateJWT, async function (req,res,next) {
