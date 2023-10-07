@@ -109,7 +109,7 @@ function UpdateMatch(){
 												aria-label="Data"
 												aria-describedby="basic-addon2"
 												id = "matchDate"
-												value= {moment(matchObject.matchDate).utc().format("YYYY-MM-DDTHH:mm")}
+												value= {moment(matchObject.matchDate).utc(-3).format("YYYY-MM-DDTHH:mm")}
 												disabled
 											/>
 											<Form.Control.Feedback></Form.Control.Feedback>

@@ -82,7 +82,7 @@ function Matches() {
                   </Card.Title>
                   <Row className="text-center">
                     <Card.Text as="h6">
-                    {moment(value.matchDate).utc().format('DD/MM/YYYY - HH:mm')}
+                    {moment(value.matchDate).utc(-3).format('DD/MM/YYYY - HH:mm')}
                     </Card.Text>
                   </Row>
                   <Row className="justify-content-center">
