@@ -78,6 +78,9 @@ function UserMatches() {
                     <Button className="px-4" type='submit' variant="danger" >
                           Excluir
                     </Button>
+                    <Button className="px-4" variant="secondary" onClick={() => navigate(`/matches/requests/${value.id}`)}>
+                          Solicitações
+                    </Button>
                   </Col>
                 </Row>
               </Card.Body>
