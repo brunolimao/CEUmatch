@@ -44,8 +44,16 @@ router.get('/join', validateJWT, async function (req,res,next) {
 
 router.post('/join', //validateJWT,
   async function(req , res , next){
-    const joinMatch = req.body; // matchId, userId, matchOwnerId
-    await UserSolicitations.create(joinMatch)
+    const joinMatch = req.body; // MatchId, UserId, matchOwnerId
+    if(!(await UserSolicitations.findOne({ where: {
+                                              MatchId: joinMatch.MatchId,
+                                              UserId: joinMatch.UserId,
+                                              matchOwner:joinMatch.matchOwner
+                                            }
+                                  })
+    )){
+      await UserSolicitations.create(joinMatch)
+    }
     res.status(200)
   }
 )
@@ -57,7 +65,7 @@ router.get('/solicitations',
     const id = req.user.id;
     const userSolicitations = await UserSolicitations.findAll({
       where: {
-          matchOwner: id,
+        matchOwner: id,
       }
     })
   res.status(200).json({userSolicitations});
@@ -100,7 +108,5 @@ router.post('/solicitations/deny',
   res.status(200).json({userSolicitations});
   }
 )
-
-
 
 module.exports = router;

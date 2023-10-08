@@ -26,7 +26,7 @@ function UpdateMatch(){
 		axios.get(`http://localhost:3001/matches/updatematch/${id}`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
 			setMatchObject(response.data);
 		});
-	});
+	}, []);
 
 	const navigate = useNavigate()
 		
