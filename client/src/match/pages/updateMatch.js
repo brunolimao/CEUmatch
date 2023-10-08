@@ -19,8 +19,9 @@ import '../../user/style/register.css'
 
 function UpdateMatch(){
 	const { id } = useParams()
-  	const [ matchObject, setMatchObject ] = useState({});
-	
+  const [ matchObject, setMatchObject ] = useState({});
+
+	const navigate = useNavigate()	
 
 	useEffect(() => {
 		axios.get(`http://localhost:3001/matches/updatematch/${id}`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
@@ -28,7 +29,7 @@ function UpdateMatch(){
 		});
 	}, []);
 
-	const navigate = useNavigate()
+
 		
 	const handleSubmit = async (e) => {
 

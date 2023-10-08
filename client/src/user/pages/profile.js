@@ -18,6 +18,8 @@ function Profile(){
     const { id } = useParams()
     const [ user, setUser ] = useState([]);
 
+    const navigate = useNavigate()
+
 	useEffect(() => {
 
 		axios.get(`http://localhost:3001/users/profile/${id}`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
@@ -28,7 +30,7 @@ function Profile(){
     
 	}, []);
 
-	const navigate = useNavigate()
+	
 
 	const handleSubmit = async (e) => {
 
@@ -58,7 +60,7 @@ function Profile(){
 
   return(
         <><NavbarHome></NavbarHome>
-            <Container className="position-absolute top-50 start-50 translate-middle login-page">
+            <Container className="vh-100 login-page mt-5">
                 <Row className="justify-content-center">
                     <Col md={6}>
                 <Card>

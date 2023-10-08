@@ -45,11 +45,6 @@ function UserMatches() {
   return (
     <><NavbarHome></NavbarHome>
     <div className="Matches">
-      <Row>
-        <Button className="px-4" variant="success" onClick={() => navigate('/matches/creatematch')}>
-          Criar Partida
-        </Button>
-      </Row>
       {listOfMatches.map((value, key) => { 
         return (    
           <div className="match" key={key}>

@@ -110,7 +110,6 @@ router.post('/solicitations/deny',
 )
 
 router.get('/profile/:id', validateJWT, async function (req,res,next) {
-  console.log("oi")
   const id = req.params.id
   const user = await User.findByPk(id);
   res.json(user);
@@ -124,5 +123,13 @@ router.post('/profile/:id', async function (req,res) {
   await User.update({ name: name, email: email, password: password}, { where: { id: id } });
   res.status(201).send(id);
 });
+
+router.get('/nav' , 
+            validateJWT,
+            async function(req , res , next){
+                const id = req.user.id;
+                console.log(id)
+                res.json(id);
+            });
 
 module.exports = router;
