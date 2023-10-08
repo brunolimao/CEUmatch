@@ -109,4 +109,20 @@ router.post('/solicitations/deny',
   }
 )
 
+router.get('/profile/:id', validateJWT, async function (req,res,next) {
+  console.log("oi")
+  const id = req.params.id
+  const user = await User.findByPk(id);
+  res.json(user);
+});
+
+router.post('/profile/:id', async function (req,res) {
+  const id = req.params.id
+  let { name, email, password} = req.body;
+  const saltRounds = 10;
+  password = await bcrypt.hash(password, saltRounds);
+  await User.update({ name: name, email: email, password: password}, { where: { id: id } });
+  res.status(201).send(id);
+});
+
 module.exports = router;

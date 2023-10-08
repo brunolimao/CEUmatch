@@ -19,7 +19,7 @@ import '../../user/style/register.css'
 
 function UpdateMatch(){
 	const { id } = useParams()
-  const [ matchObject, setMatchObject ] = useState({});
+  	const [ matchObject, setMatchObject ] = useState({});
 	
 
 	useEffect(() => {
