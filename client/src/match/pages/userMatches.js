@@ -15,6 +15,7 @@ import NavbarHome from "../../components/NavbarHome";
 function UserMatches() {
 
   const [listOfMatches, setListOfMatches] = useState([]);
+  const [popShowSolicitations, setpopShowSolicitations] = useState(false);
   const [popShow, setpopShow] = useState(false);
   const navigate = useNavigate()
 
@@ -22,7 +23,8 @@ function UserMatches() {
     axios.get(`http://localhost:3001/matches/usermatches/`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
       setListOfMatches(response.data);
     });
-  }, []);
+  }, [popShowSolicitations]);
+
 
   const deleteMatch = async (e, id) => {
 
@@ -40,6 +42,32 @@ function UserMatches() {
 		  console.error(error);
 		}
 
+  }
+
+  const handleAccept = async (e, userId, matchId) =>{
+    e.preventDefault()
+    try {
+		  await axios.post(`http://localhost:3001/users/solicitations/accept`, {
+        matchId: matchId,
+        userId: userId,
+		}).then(setpopShowSolicitations(false))
+		} catch (error) {
+		  console.error(error);
+		}
+    
+  }
+
+  const handleDeny = async (e, userId, matchId) =>{
+    e.preventDefault()
+    try {
+		  await axios.post(`http://localhost:3001/users/solicitations/deny`, {
+        matchId: matchId,
+        userId: userId,
+		}).then(setpopShowSolicitations(false))
+		} catch (error) {
+		  console.error(error);
+		}
+    
   }
 
   return (
@@ -77,13 +105,13 @@ function UserMatches() {
                 </Row>
                 <Row className="justify-content-center text-end mt-3">
 									<Col md={12}>
-                    <Button className="px-4 mx-1" variant="primary" onClick={() => navigate(`/matches/updatematch/${value.id}`)}>
+                    <Button className="px-4" variant="primary" onClick={() => navigate(`/matches/updatematch/${value.id}`)}>
                           Editar
                     </Button>
-                    <Button onClick={() => setpopShow(true)} className="px-4" type='submit' variant="danger">
+                    <Button onClick={() => setpopShow(true)} className="px-4 mx-1" type='submit' variant="danger">
                           Excluir
                     </Button>
-                    <Button className="px-4" variant="secondary" onClick={() => navigate(`/matches/requests/${value.id}`)}>
+                    <Button className="px-4" variant="secondary" onClick={() => setpopShowSolicitations(true)}>
                           Solicitações
                     </Button>
                     
@@ -92,7 +120,36 @@ function UserMatches() {
               </Card.Body>
             </Card>
             </Form>
+            <Modal
+              size="lg"
+              centered
+              show={popShowSolicitations}
+              onHide={() => setpopShowSolicitations(false)}
+              aria-labelledby="example-modal-sizes-title-sm"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="example-modal-sizes-title-sm">
+                  Solicitações
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                {value.solicitations.map((solicitation, thirdkey) => {
+                  return (
+                    <Row className="justify-content-between my-1" key={thirdkey}>
+                      <Col>{solicitation}</Col>
+                      <Col className="text-end">
+                        <Button className="mx-1" onClick={event => handleAccept(event, value.solicitationsId[thirdkey], value.id)} variant="success">Aceitar</Button>{' '}
+                        <Button variant="danger" onClick={event => handleDeny(event, value.solicitationsId[thirdkey], value.id)}>Recusar</Button>{' '}
+                      </Col>
+                      
+                      
+                    </Row>
+                  )
+                })}
+              </Modal.Body>
+            </Modal>
           </div>
+          
         );
       })}
       <Modal
@@ -108,6 +165,8 @@ function UserMatches() {
         </Modal.Header>
         <Modal.Body>Partida excluída.</Modal.Body>
       </Modal>
+
+      
     </div>
     </>
   );

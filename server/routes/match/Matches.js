@@ -72,9 +72,64 @@ router.get("/usermatches", validateJWT, async function (req, res, next) {
             listofParticipants.push(Participant[0].dataValues.name)
         }
         userMatches[i].dataValues.participants = listofParticipants
+        const listofSolicitationsId = await UserSolicitations.findAll({
+            where: {
+               "MatchId": MatchId
+            }
+        });
+        let listofSolicitations = []
+        let listofIds = []
+        for(let j=0; j < listofSolicitationsId.length; j++){
+            const userRequest = await User.findAll({
+                where: {
+                   "id": listofSolicitationsId[j].dataValues.UserId
+                }
+            });
+            listofSolicitations.push(userRequest[0].dataValues.name)
+            listofIds.push(userRequest[0].dataValues.id)
+        }
+        userMatches[i].dataValues.solicitations = listofSolicitations
+        userMatches[i].dataValues.solicitationsId = listofIds
     }
     res.json(userMatches)
 });
+
+router.get('/solicitations',
+  validateJWT,
+  async function(req , res , next){
+   const id = req.user.id
+    const userMatches = await Match.findAll({
+        where: {
+            userId: id,
+        },
+        order: [
+            ['matchDate', 'ASC']
+        ]
+    });
+    for(let i = 0; i < userMatches.length; i++){  
+        let MatchId = userMatches[i].dataValues.id         
+        const listofSolicitationsId = await UserSolicitations.findAll({
+            where: {
+               "MatchId": MatchId
+            }
+        });
+        let listofSolicitations = []
+        let listofIds = []
+        for(let j=0; j < listofSolicitationsId.length; j++){
+            const userRequest = await User.findAll({
+                where: {
+                   "id": listofSolicitationsId[j].dataValues.UserId
+                }
+            });
+            listofSolicitations.push(userRequest[0].dataValues.name)
+            listofIds.push(userRequest[0].dataValues.id)
+        }
+        userMatches[i].dataValues.solicitations = listofSolicitations
+        userMatches[i].dataValues.solicitationsId = listofIds
+    }
+    res.json(userMatches)
+  }
+)
 
 router.get('/requests/:id' , async function(req,res) {
     const id = req.params.id

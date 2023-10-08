@@ -58,21 +58,7 @@ router.post('/join', //validateJWT,
   }
 )
 
-
-router.get('/solicitations',
-  validateJWT,
-  async function(req , res , next){
-    const id = req.user.id;
-    const userSolicitations = await UserSolicitations.findAll({
-      where: {
-        matchOwner: id,
-      }
-    })
-  res.status(200).json({userSolicitations});
-  }
-)
-
-router.get('/:id' ,
+router.get('/user/:id' ,
   validateJWT,
   async function(req,res,next){
     const id = req.params.id;
@@ -89,14 +75,15 @@ router.get('/solicitations/accept', validateJWT, async function (req,res,next) {
 router.post('/solicitations/accept',
   async function(req , res , next){
     const userSolicitationAccept = req.body //matchId, userId (id de quem quer entrar)
-    await MatchParticipants.create(userSolicitationAccept)
-    await userSolicitations.destroy({
+    console.log(userSolicitationAccept)
+    await MatchParticipants.create({ UserId: userSolicitationAccept.userId, MatchId: userSolicitationAccept.matchId})
+    await UserSolicitations.destroy({
       where: {
-          UserId: userId,
-          MatchId: matchId
+          UserId: userSolicitationAccept.userId,
+          MatchId: userSolicitationAccept.matchId
       },
   })
-  res.status(200).json({userSolicitations});
+  res.status(200);
   }
 )
 
@@ -106,17 +93,17 @@ router.get('/solicitations/deny', validateJWT, async function (req,res,next) {
 });
 
 router.post('/solicitations/deny',
-  async function(req , res , next){
-    const userSolicitationAccept = req.body //matchId, userId (id de quem quer entrar)
-    await userSolicitations.destroy({
-      where: {
-          UserId: userId,
-          MatchId: matchId
-      },
+async function(req , res , next){
+  const userSolicitationAccept = req.body //matchId, userId (id de quem quer entrar)
+  await UserSolicitations.destroy({
+    where: {
+        UserId: userSolicitationAccept.userId,
+        MatchId: userSolicitationAccept.matchId
+    },
   })
-  res.status(200).json({userSolicitations});
-  }
-)
+  res.status(200);
+  
+})
 
 router.get('/profile/:id', validateJWT, async function (req,res,next) {
   const id = req.params.id

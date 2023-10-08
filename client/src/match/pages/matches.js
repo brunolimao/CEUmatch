@@ -37,15 +37,9 @@ function Matches() {
     'token': sessionStorage.getItem("token")
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, matchId, matchOwnerId) => {
 
 		e.preventDefault();
-
-		const matchIdInput = document.getElementById("matchId");
-    const matchOwnerIdInput = document.getElementById("matchOwnerId");
-
-		const matchId = matchIdInput.value;
-    const matchOwnerId = Number(matchOwnerIdInput.value);
 
 		try {
 		  const response = await axios.post('http://localhost:3001/users/join', {
@@ -65,11 +59,9 @@ function Matches() {
     <><NavbarHome></NavbarHome>
     <div className="Matches"> 
       {listOfMatches.map((value, key) => { 
-        return (    
+        return (
           <div className="match" key={key}>
-            <Form onSubmit={handleSubmit}>
-              <input type="hidden" id="matchId" name="matchId" value={value.id}/>
-              <input type="hidden" id="matchOwnerId" name="matchOwnerId" value={value.userId}/>
+            <Form onSubmit={event=>handleSubmit(event,value.id,value.userId)}>
               <Card >
                 <Card.Header className="text-center" as="h2">
                   {value.title}
@@ -122,6 +114,20 @@ function Matches() {
         );
       })}
     </div>
+
+    <Modal
+        size="sm"
+        show={popShow}
+        onHide={() => setpopShow(false)}
+        aria-labelledby="example-modal-sizes-title-sm"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-sm">
+            Aviso
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Solicitação enviada.</Modal.Body>
+      </Modal>
     </>
   );
 }
