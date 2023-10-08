@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const router = express.Router();
 const Match = require("../../models/Match.js");
 const MatchParticipants = require("../../models/MatchParticipants.js");
+const User = require( "../../models/User.js");
 const NOW = new Date();
 const  {validateJWT} = require('../../middlewares/auth.js');
 const UserSolicitations = require('../../models/UserSolicitations.js');
@@ -20,8 +21,26 @@ router.get("/", validateJWT,
 			},
 			order: [
 				['matchDate', 'ASC']
-			]
+			]   
 		});
+        for(let i = 0; i < listofMatches.length; i++){  
+            let MatchId = listofMatches[i].dataValues.id         
+            const listofParticipantsId = await MatchParticipants.findAll({
+                where: {
+                   "MatchId": MatchId
+                }
+            });
+            let listofParticipants = []
+            for(let j=0; j < listofParticipantsId.length; j++){
+                const Participant = await User.findAll({
+                    where: {
+                       "id": listofParticipantsId[j].dataValues.UserId
+                    }
+                });
+                listofParticipants.push(Participant[0].dataValues.name)
+            }
+            listofMatches[i].dataValues.participants = listofParticipants
+        }
 	res.json(listofMatches)
 	}
 );
@@ -35,7 +54,25 @@ router.get("/usermatches", validateJWT, async function (req, res, next) {
         order: [
             ['matchDate', 'ASC']
         ]
-    })
+    });
+    for(let i = 0; i < userMatches.length; i++){  
+        let MatchId = userMatches[i].dataValues.id         
+        const listofParticipantsId = await MatchParticipants.findAll({
+            where: {
+               "MatchId": MatchId
+            }
+        });
+        let listofParticipants = []
+        for(let j=0; j < listofParticipantsId.length; j++){
+            const Participant = await User.findAll({
+                where: {
+                   "id": listofParticipantsId[j].dataValues.UserId
+                }
+            });
+            listofParticipants.push(Participant[0].dataValues.name)
+        }
+        userMatches[i].dataValues.participants = listofParticipants
+    }
     res.json(userMatches)
 });
 
@@ -57,7 +94,9 @@ router.get('/createMatch', validateJWT, async function (req,res,next) {
 
 router.post('/createMatch', async function (req,res) {
                 const matchData = req.body;
-                await Match.create(matchData);
+
+                const matchCreated = await Match.create(matchData);
+                await MatchParticipants.create({UserId: matchData.userId, MatchId: matchCreated.dataValues.id})
                 res.status(201).send(matchData);
 });
 
@@ -89,5 +128,15 @@ router.post("/", async (req, res) => {
     await Match.create(match);
     res.json(match);
 });
+
+router.get('/:id', validateJWT, async function (req, res) {
+    const id = req.params.id;
+    const listofUsers =  await MatchParticipants.findAll({
+        where: {
+            MatchId: id,
+        },
+    });
+    res.json(listofUsers)
+})
 
 module.exports = router

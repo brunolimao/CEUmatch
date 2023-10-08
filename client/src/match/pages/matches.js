@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import moment from "moment";
 import NavbarHome from "../../components/NavbarHome";
 
@@ -14,7 +15,9 @@ import NavbarHome from "../../components/NavbarHome";
 function Matches() {
 
   const [listOfMatches, setListOfMatches] = useState([]);
+  const [listOfUsers, setListOfUsers] = useState([]);
   const [id, setId] = useState([]);
+  const [popShow, setpopShow] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:3001/matches/',{headers:{token: sessionStorage.getItem("token")}}).then((response) => {
@@ -56,12 +59,7 @@ function Matches() {
 		} catch (error) {
 		  console.error(error);
 		}
-
-		
   };
-
-
-
 
   return (
     <><NavbarHome></NavbarHome>
@@ -85,16 +83,36 @@ function Matches() {
                     {moment(value.matchDate).utc(-3).format('DD/MM/YYYY - HH:mm')}
                     </Card.Text>
                   </Row>
-                  <Row className="justify-content-center">
-                    <Card.Text as="h5">
-                      (Lista de participantes)
+                  <Row className="justify-content-center mt-2">
+                    <Card.Text as="h6">
+                      {value.participants.map((participant, secondkey) => { 
+                        return (
+                          <p key={secondkey}>
+                            {secondkey+1}) {participant}
+                          </p>
+
+                        );
+                      })}
                     </Card.Text>
                   </Row>
                   <Row className="justify-content-center text-end mt-3">
                     <Col md={12}>
-                      <Button type="submit" className="px-4" variant="success">
+                      <Button onClick={() => setpopShow(true)} type="submit" className="px-4" variant="success">
                             Juntar-se 
                       </Button>
+                      <Modal
+                        size="sm"
+                        show={popShow}
+                        onHide={() => setpopShow(false)}
+                        aria-labelledby="example-modal-sizes-title-sm"
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title id="example-modal-sizes-title-sm">
+                            Aviso
+                          </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>Solicitação enviada.</Modal.Body>
+                      </Modal>
                     </Col>
                   </Row>
                 </Card.Body>
