@@ -75,7 +75,6 @@ router.get('/solicitations/accept', validateJWT, async function (req,res,next) {
 router.post('/solicitations/accept',
   async function(req , res , next){
     const userSolicitationAccept = req.body //matchId, userId (id de quem quer entrar)
-    console.log(userSolicitationAccept)
     await MatchParticipants.create({ UserId: userSolicitationAccept.userId, MatchId: userSolicitationAccept.matchId})
     await UserSolicitations.destroy({
       where: {
@@ -123,9 +122,9 @@ router.post('/profile/:id', async function (req,res) {
 router.get('/nav' , 
             validateJWT,
             async function(req , res , next){
-                const id = req.user.id;
-                console.log(id)
-                res.json(id);
+                const user = req.user;
+                console.log(user)
+                res.json(user);
             });
 
 module.exports = router;

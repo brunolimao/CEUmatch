@@ -58,7 +58,7 @@ function CreateMatch(){
 
   return(
 		<><NavbarHome></NavbarHome>
-		<Container className="position-absolute top-50 start-50 translate-middle login-page">
+		<Container className="vh-100 mt-5 login-page">
 			
 			<Row className="justify-content-center">
 				<Col md={6}>

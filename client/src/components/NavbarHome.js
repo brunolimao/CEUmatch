@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/esm/Col';
 
 function NavbarHome() {
 
-  const [id, setId] = useState([])
+  const [user, setUser] = useState({})
   const navigate = useNavigate()
 
 
@@ -27,9 +27,8 @@ function NavbarHome() {
 
   useEffect(() => {
 		axios.get(`http://localhost:3001/users/nav/`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
-      console.log("============")
-      console.log(response.data)
-			setId(response.data);
+      console.log(response.data.id)
+			setUser(response.data);
 		});
 	}, []);
 
@@ -49,7 +48,7 @@ function NavbarHome() {
           </Nav>
         
         
-      <Nav.Link className='my-3 mx-2'><Link to={`/users/profile/${id}`} className='link'> <FontAwesomeIcon icon={faCircleUser} size="2xl" className='mx-1'/>Perfil</Link></Nav.Link>
+      <Nav.Link className='my-3 mx-2'><Link to={`/users/profile/${user.id}`} className='link'> <FontAwesomeIcon icon={faCircleUser} size="2xl" className='mx-1'/>{user.name}</Link></Nav.Link>
       <Button type="submit" className="px-4 mx-2" variant="danger" onClick={handleClick}>
         Sair
       </Button>
