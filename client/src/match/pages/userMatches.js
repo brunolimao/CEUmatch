@@ -26,7 +26,7 @@ function UserMatches() {
     axios.get(`http://localhost:3001/matches/usermatches/`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
       setListOfMatches(response.data);
     });
-  }, [popShowSolicitations]);
+  }, [popShowSolicitations, modalName, modalId, modalMatchId]);
 
 
   const deleteMatch = async (e, id) => {
