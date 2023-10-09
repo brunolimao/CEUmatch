@@ -11,30 +11,38 @@ const hashAcessSecretKey = '67c0fbaeee22ae50902039bd1523c094dc27b4bce6ef664a939a
 
 
 async function loginAlt(req,res,next){
-  const emailUser = req.body.email;
-  const passwordUser = req.body.password;
-  const user = await User.findOne({
-    where: {email:emailUser}
-  });
-  if (!user) {
-    throw new Error('E-mail incorreto!');
-  }
+  try{
+    const emailUser = req.body.email;
+    const passwordUser = req.body.password;
+    const user = await User.findOne({
+      where: {email:emailUser}
+    });
+    if (!user) {
+      return res.status(401).send({ error: 'E-mail incorreto!'})
+    }
 
-  const validPassword = await bcrypt.compare(passwordUser, user.password);
-  if (!validPassword) {
-      throw new Error('E-mail e/ou senha incorretos!');
-  }
-  let payload = {
-    id: user.id,
-    name: user.name,
-    email: user.email
-  };
+    const validPassword = await bcrypt.compare(passwordUser, user.password);
+    if (!validPassword) {
+      return res.status(401).send({ error: 'E-mail e/ou senha incorretos!'})
+      //throw new Error('E-mail e/ou senha incorretos!')
+    }
+    let payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email
+    };
 
-  const token = jwt.sign(payload, hashAcessSecretKey, {
-    //expiresIn: 60 // 1 minuto de expiração
-  });
-  
-  res.json(token);
+    const token = jwt.sign(payload, hashAcessSecretKey, {
+      //expiresIn: 60 // 1 minuto de expiração
+    });
+    
+    res.json(token);}
+  catch(error){
+    res.send({    
+      error: 'Error',
+      message: error.message    
+    })    
+  }
 }
 
 function validateJWT(req,res,next){

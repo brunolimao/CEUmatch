@@ -17,6 +17,9 @@ function UserMatches() {
   const [listOfMatches, setListOfMatches] = useState([]);
   const [popShowSolicitations, setpopShowSolicitations] = useState(false);
   const [popShow, setpopShow] = useState(false);
+  const [modalName, setModalName] = useState([]);
+  const [modalId, setModalId] = useState([]);
+  const [modalMatchId, setModalMatchId] = useState([]);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -42,6 +45,14 @@ function UserMatches() {
 		  console.error(error);
 		}
 
+  }
+
+  const handleSolicitation = async (e, solicitacoes,id,matchId) => {
+    e.preventDefault()
+    setpopShowSolicitations(true)
+    setModalName(solicitacoes)
+    setModalId(id)
+    setModalMatchId(matchId)
   }
 
   const handleAccept = async (e, userId, matchId) =>{
@@ -111,7 +122,7 @@ function UserMatches() {
                     <Button onClick={() => setpopShow(true)} className="px-4 mx-1" type='submit' variant="danger">
                           Excluir
                     </Button>
-                    <Button className="px-4" variant="secondary" onClick={() => setpopShowSolicitations(true)}>
+                    <Button className="px-4" variant="secondary" onClick={event => handleSolicitation(event, value.solicitations,value.solicitationsId,value.id)}>
                           Solicitações
                     </Button>
                     
@@ -133,19 +144,19 @@ function UserMatches() {
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                {value.solicitations.map((solicitation, thirdkey) => {
-                  return (
+                {modalName.map((solicitation,thirdkey) => {
+                  return(
                     <Row className="justify-content-between my-1" key={thirdkey}>
                       <Col>{solicitation}</Col>
                       <Col className="text-end">
-                        <Button className="mx-1" onClick={event => handleAccept(event, value.solicitationsId[thirdkey], value.id)} variant="success">Aceitar</Button>{' '}
-                        <Button variant="danger" onClick={event => handleDeny(event, value.solicitationsId[thirdkey], value.id)}>Recusar</Button>{' '}
+                        <Button className="mx-1" onClick={event => handleAccept(event, modalId[thirdkey], modalMatchId)} variant="success">Aceitar</Button>{' '}
+                        <Button variant="danger" onClick={event => handleDeny(event, modalId[thirdkey], modalMatchId)}>Recusar</Button>{' '}
                       </Col>
-                      
-                      
                     </Row>
                   )
+
                 })}
+                
               </Modal.Body>
             </Modal>
           </div>

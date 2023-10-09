@@ -15,20 +15,17 @@ import NavbarHome from "../../components/NavbarHome";
 function Matches() {
 
   const [listOfMatches, setListOfMatches] = useState([]);
-  const [listOfUsers, setListOfUsers] = useState([]);
   const [id, setId] = useState([]);
   const [popShow, setpopShow] = useState(false);
 
   useEffect(() => {
     axios.get('http://localhost:3001/matches/',{headers:{token: sessionStorage.getItem("token")}}).then((response) => {
-      console.log(response.data)
       setListOfMatches(response.data);
     });
   }, []);
 
   useEffect(() => {
     axios.get('http://localhost:3001/users/join',{headers:{token: sessionStorage.getItem("token")}}).then((response) => {
-      console.log(response.data)
       setId(response.data);
     });
   }, []);

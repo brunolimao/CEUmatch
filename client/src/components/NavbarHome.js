@@ -27,7 +27,6 @@ function NavbarHome() {
 
   useEffect(() => {
 		axios.get(`http://localhost:3001/users/nav/`, {headers:{token: sessionStorage.getItem("token")}}).then((response) => {
-      console.log(response.data.id)
 			setUser(response.data);
 		});
 	}, []);

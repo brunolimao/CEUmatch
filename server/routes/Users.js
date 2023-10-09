@@ -17,9 +17,19 @@ router.post('/cadastro',
       res.status(201).send(userData);
   });
 
-router.post('/login',loginAlt,
-    async function(req , res , next){
-        res.redirect("/welcome")
+router.post('/login',
+  async function(req , res , next){
+    try{
+      loginAlt(req,res)
+      res.status(200)
+    }
+    catch(error){
+      res.send({    
+        error: 'Error',
+        message: error.message    
+      })  
+    }
+       
 });
 
 
@@ -45,15 +55,23 @@ router.get('/join', validateJWT, async function (req,res,next) {
 router.post('/join', //validateJWT,
   async function(req , res , next){
     const joinMatch = req.body; // MatchId, UserId, matchOwnerId
-    if(!(await UserSolicitations.findOne({ where: {
+    if((!(await UserSolicitations.findOne({ where: {
                                               MatchId: joinMatch.MatchId,
                                               UserId: joinMatch.UserId,
                                               matchOwner:joinMatch.matchOwner
                                             }
-                                  })
-    )){
-      await UserSolicitations.create(joinMatch)
-    }
+                                          }
+                                        )
+          )) && (!(await MatchParticipants.findOne({ where: {
+                                                      MatchId: joinMatch.MatchId,
+                                                      UserId: joinMatch.UserId
+                                                    }
+                                                  }
+                                                )
+                    ))
+       ){
+        await UserSolicitations.create(joinMatch)
+        }
     res.status(200)
   }
 )

@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { useState } from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -10,12 +11,16 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import CeuImage from '../../public/ceu.jpg'
 import Image from 'react-bootstrap/Image';
+import Modal from 'react-bootstrap/Modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
 import "../style/login.css"
 
 
 function Login(){
+
+	const [popShow, setpopShow] = useState(false);
+	const [modalInfo, setModalInfo] = useState([false]);
 
 	const navigate = useNavigate()
 
@@ -36,11 +41,11 @@ function Login(){
 		  }, {
 			  withCredentials: true,
 		})
-			sessionStorage.setItem("token",response.data)
-			console.log(response.data);
+			sessionStorage.setItem("token", response.data)
 			navigate('/matches');
 		} catch (error) {
-		  console.error(error);
+			setpopShow(true)
+			setModalInfo(error.response.data.error)
 		}
 
 		
@@ -112,6 +117,19 @@ function Login(){
 					</Row>
       	</Card.Body>
     	</Card>
+			<Modal
+        size="sm"
+        show={popShow}
+        onHide={() => setpopShow(false)}
+        aria-labelledby="example-modal-sizes-title-sm"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-sm">
+            Aviso
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalInfo}</Modal.Body>
+      </Modal>
 
 
 
